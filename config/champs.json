@@ -1,0 +1,323 @@
+{
+    "champions": [
+        "Aatrox",
+        "Ahri",
+        "Akali",
+        "Akshan",
+        "Alistar",
+        "Ambessa",
+        "Amumu",
+        "Anivia",
+        "Annie",
+        "Aphelios",
+        "Ashe",
+        "Aurelion Sol",
+        "Aurora",
+        "Azir",
+        "Bard",
+        "Bel'Veth",
+        "Blitzcrank",
+        "Brand",
+        "Braum",
+        "Briar",
+        "Caitlyn",
+        "Camille",
+        "Cassiopeia",
+        "Cho'Gath",
+        "Corki",
+        "Darius",
+        "Diana",
+        "Dr. Mundo",
+        "Draven",
+        "Ekko",
+        "Elise",
+        "Evelynn",
+        "Ezreal",
+        "Fiddlesticks",
+        "Fiora",
+        "Fizz",
+        "Galio",
+        "Gangplank",
+        "Garen",
+        "Gnar",
+        "Gragas",
+        "Graves",
+        "Gwen",
+        "Hecarim",
+        "Heimerdinger",
+        "Hwei",
+        "Illaoi",
+        "Irelia",
+        "Ivern",
+        "Janna",
+        "Jarvan IV",
+        "Jax",
+        "Jayce",
+        "Jhin",
+        "Jinx",
+        "K'Sante",
+        "Kai'Sa",
+        "Kalista",
+        "Karma",
+        "Karthus",
+        "Kassadin",
+        "Katarina",
+        "Kayle",
+        "Kayn",
+        "Kennen",
+        "Kha'Zix",
+        "Kindred",
+        "Kled",
+        "Kog'Maw",
+        "LeBlanc",
+        "Lee Sin",
+        "Leona",
+        "Lillia",
+        "Lissandra",
+        "Lucian",
+        "Lulu",
+        "Lux",
+        "Malphite",
+        "Malzahar",
+        "Maokai",
+        "Master Yi",
+        "Milio",
+        "Miss Fortune",
+        "Mordekaiser",
+        "Morgana",
+        "Naafiri",
+        "Nami",
+        "Nasus",
+        "Nautilus",
+        "Neeko",
+        "Nidalee",
+        "Nilah",
+        "Nocturne",
+        "Nunu & Willump",
+        "Olaf",
+        "Orianna",
+        "Ornn",
+        "Pantheon",
+        "Poppy",
+        "Pyke",
+        "Qiyana",
+        "Quinn",
+        "Rakan",
+        "Rammus",
+        "Rek'Sai",
+        "Rell",
+        "Renata Glasc",
+        "Renekton",
+        "Rengar",
+        "Riven",
+        "Rumble",
+        "Ryze",
+        "Samira",
+        "Sejuani",
+        "Senna",
+        "Seraphine",
+        "Sett",
+        "Shaco",
+        "Shen",
+        "Shyvana",
+        "Singed",
+        "Sion",
+        "Sivir",
+        "Skarner",
+        "Smolder",
+        "Sona",
+        "Soraka",
+        "Swain",
+        "Sylas",
+        "Syndra",
+        "Tahm Kench",
+        "Taliyah",
+        "Talon",
+        "Taric",
+        "Teemo",
+        "Thresh",
+        "Tristana",
+        "Trundle",
+        "Tryndamere",
+        "Twisted Fate",
+        "Twitch",
+        "Udyr",
+        "Urgot",
+        "Varus",
+        "Vayne",
+        "Veigar",
+        "Vel'Koz",
+        "Vex",
+        "Vi",
+        "Viego",
+        "Viktor",
+        "Vladimir",
+        "Volibear",
+        "Warwick",
+        "Wukong",
+        "Xayah",
+        "Xerath",
+        "Xin Zhao",
+        "Yasuo",
+        "Yone",
+        "Yorick",
+        "Yuumi",
+        "Zac",
+        "Zed",
+        "Zeri",
+        "Ziggs",
+        "Zilean",
+        "Zoe",
+        "Zyra"
+    ],
+    "champ_corrections": [
+        {
+            "incorrect": "Mundo",
+            "correct": "Dr. Mundo"
+        },
+        {
+            "incorrect": "Kaisa",
+            "correct": "Kai'Sa"
+        },
+        {
+            "incorrect": "Kai'sa",
+            "correct": "Kai'Sa"
+        },
+        {
+            "incorrect": "Kogmaw",
+            "correct": "Kog'Maw"
+        },
+        {
+            "incorrect": "Nunu",
+            "correct": "Nunu & Willump"
+        },
+        {
+            "incorrect": "Reksai",
+            "correct": "Rek'Sai"
+        },
+        {
+            "incorrect": "Velkoz",
+            "correct": "Vel'Koz"
+        },
+        {
+            "incorrect": "Xinzhao",
+            "correct": "Xin Zhao"
+        },
+        {
+            "incorrect": "Fiddle",
+            "correct": "Fiddlesticks"
+        },
+        {
+            "incorrect": "Sej",
+            "correct": "Sejuani"
+        },
+        {
+            "incorrect": "Khazix",
+            "correct": "Kha'zix"
+        },
+        {
+            "incorrect": "Renata glasc",
+            "correct": "Renata Glasc"
+        },
+        {
+            "incorrect": "Cait",
+            "correct": "Caitlyn"
+        },
+        {
+            "incorrect": "Yumi",
+            "correct": "Yuumi"
+        },
+        {
+            "incorrect": "Kench",
+            "correct": "Tahm Kench"
+        },
+        {
+            "incorrect": "Jarvan",
+            "correct": "Jarvan IV"
+        },
+        {
+            "incorrect": "Lee sin",
+            "correct": "Lee Sin"
+        },
+        {
+            "incorrect": "Xin zhao",
+            "correct": "Xin Zhao"
+        },
+        {
+            "incorrect": "Xerath?",
+            "correct": "Xerath"
+        },
+        {
+            "incorrect": "Tahm kench",
+            "correct": "Tahm Kench"
+        },
+        {
+            "incorrect": "Belveth",
+            "correct": "Bel'Veth"
+        },
+        {
+            "incorrect": "Leblanc",
+            "correct": "LeBlanc"
+        },
+        {
+            "incorrect": "Miss fortune",
+            "correct": "Miss Fortune"
+        },
+        {
+            "incorrect": "A sol",
+            "correct": "Aurelion Sol"
+        },
+        {
+            "incorrect": "Mudno",
+            "correct": "Dr. Mundo"
+        },
+        {
+            "incorrect": "Camile",
+            "correct": "Camille"
+        },
+        {
+            "incorrect": "Lee chin",
+            "correct": "Lee Sin"
+        },
+        {
+            "incorrect": "Master yi",
+            "correct": "Master Yi"
+        },
+        {
+            "incorrect": "Mf",
+            "correct": "Miss Fortune"
+        },
+        {
+            "incorrect": "Kha",
+            "correct": "Kha'Zix"
+        },
+        {
+            "incorrect": "Cho'gath",
+            "correct": "Cho'Gath"
+        },
+        {
+            "incorrect": "Vel'koz",
+            "correct": "Vel'Koz"
+        },
+        {
+            "incorrect": "Twisted fate",
+            "correct": "Twisted Fate"
+        },
+        {
+            "incorrect": "K'sante",
+            "correct": "K'Sante"
+        },
+        {
+            "incorrect": "Aurelion sol",
+            "correct": "Aurelion Sol"
+        },
+        {
+            "incorrect": "Illoai",
+            "correct": "Illaoi"
+        },
+        {
+            "incorrect": "Jarvan iv",
+            "correct": "Jarvan IV"
+        }
+    ]
+}

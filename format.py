@@ -2,6 +2,15 @@ import sys
 import json
 import pandas as pd
 
+# ANSI escape codes
+RED = '\033[31m'
+GREEN = '\033[32m'
+YELLOW = '\033[33m'
+BLUE = '\033[34m'
+MAGENTA = '\033[35m'
+CYAN = '\033[36m'
+RESET = '\033[0m'  # Reset to default color
+
 # open spreadsheet as pandas df
 df = pd.read_csv('data/data.csv')
 headers = df.columns.tolist()
@@ -12,10 +21,17 @@ for header in headers:
     print(f'{header}: \n{df[header].head()}')
     print('\n')
 
-# access json data in config folder
+# access new header names (json) in config folder
 with open('config/new_headers.json', 'r') as file:
     new_headers = json.load(file)["new_headers"]
     print(new_headers)
+
+# access list of champions (json) in config folder
+with open('config/champs.json', 'r') as file:
+    json_data = json.load(file)
+    champions = json_data["champions"]
+    champ_corrections = json_data["champ_corrections"]
+    print(champions)
 
 # create new df using the new headers
 new_df = pd.read_csv('data/data.csv')
@@ -35,15 +51,43 @@ new_df['top_3_champs'] = new_df['top_3_champs'].apply(lambda x: x.split(',') if 
 # get rid of whitespace in the beginning and end of each string in the list
 new_df['top_3_champs'] = new_df['top_3_champs'].apply(lambda x: [champ.strip() for champ in x])
 
+# format each champ name to be first letter capitlized, rest lowercase
+new_df['top_3_champs'] = new_df['top_3_champs'].apply(lambda x: [champ.capitalize() for champ in x])
+
 # add 3 columns (top_champ, second_champ, third_champ) to the df for of the top 3 champions
 new_df['top_champ'] = new_df['top_3_champs'].apply(lambda x: x[0])
 new_df['second_champ'] = new_df['top_3_champs'].apply(lambda x: x[1] if len(x) > 1 else None)
 new_df['third_champ'] = new_df['top_3_champs'].apply(lambda x: x[2] if len(x) > 2 else None)
 
+# if a champ is not in the list of champions, print "champ" name and discord_username
+for index, row in new_df.iterrows():
+    for champ_name in row['top_3_champs']:
+        # print(f'Addressing champ_name: {champ_name}')
+        champion_addressed = False
+        if champ_name not in champions:
+            if not champion_addressed:
+                # champ_corrections is a list of tuples, where the first element is the incorrect champ name, and the second element is the correct champ name
+                # if champ_name is in "incorrect" champ_corrections, replace it with the "correct" champ name
+                for naming_pair in champ_corrections:
+                    if champ_name == naming_pair["incorrect"]:
+                        champ_name = naming_pair["correct"]
+                        print(f'{GREEN}[Champion Corrected] {naming_pair["incorrect"]} -> {naming_pair["correct"]} {RESET}')
+                        champion_addressed = True
+                        # replace the incorrect champ name with the correct champ name in the df
+                        new_df.at[index, 'top_3_champs'] = [champ_name if champ == naming_pair["incorrect"] else champ for champ in row['top_3_champs']]
+                        break
+                if not champion_addressed:
+                    print(f'{RED}[Champion Not In list] {champ_name} - {row["discord_username"]}{RESET}')
+                    champion_addressed = True
+sys.exit()
+
 # print list of unique champions from 'top_3_champs', sort alphabetically
 champions = set()
 new_df['top_3_champs'].apply(lambda x: [champions.add(champ) for champ in x])
 print(f'Champions: {sorted(champions)}')
+
+# maybe have a list of champs and compare to that, if not in list, error solve in console???
+# MATCHA
 
 # export df into new csv file in data folders
 new_df.to_csv('data/formatted_data.csv', index=False)
