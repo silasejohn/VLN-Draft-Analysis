@@ -16,5 +16,33 @@ This project aims to provide a toolset to analyze sign-up responses for VLN Draf
 - Required Python packages (install via `requirements.txt`)
     - `pandas`
     - `sys`
+
 ### Installation
-1. Clone this repository:
+1. Clone this repository: 
+    ```
+    git clone git@github.com:silasejohn/VLN-Draft-Analysis.git
+    ```
+
+2. Install dependencies: 
+    ```
+    pip install -r requirements.txt
+    ```
+3. Place the updated sign-up response spreadsheet (`data.csv`) in the data/ folder
+
+### Usage
+1. Run the format script to format the csv
+    ```
+    python format.py
+    ```
+2. Run the analysis script to analyze the csv
+     ```
+    python analyze.py
+    ```
+3. Export / Run Locally to Visualize Results
+4. Use the "draft tool" to maintain priorities on players left in draft
+
+## Customization / Config
+....
+
+## Acknowledgments
+Special thanks to GepettosPuppet 

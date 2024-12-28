@@ -2,7 +2,7 @@ import sys
 import pandas as pd
 
 # open spreadsheet as pandas df
-df = pd.read_csv('data.csv')
+df = pd.read_csv('data/data.csv')
 headers = df.columns.tolist()
 print(f'Headers: {headers}')
 
