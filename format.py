@@ -35,6 +35,11 @@ new_df['top_3_champs'] = new_df['top_3_champs'].apply(lambda x: x.split(',') if 
 # get rid of whitespace in the beginning and end of each string in the list
 new_df['top_3_champs'] = new_df['top_3_champs'].apply(lambda x: [champ.strip() for champ in x])
 
+# add 3 columns (top_champ, second_champ, third_champ) to the df for of the top 3 champions
+new_df['top_champ'] = new_df['top_3_champs'].apply(lambda x: x[0])
+new_df['second_champ'] = new_df['top_3_champs'].apply(lambda x: x[1] if len(x) > 1 else None)
+new_df['third_champ'] = new_df['top_3_champs'].apply(lambda x: x[2] if len(x) > 2 else None)
+
 # print list of unique champions from 'top_3_champs', sort alphabetically
 champions = set()
 new_df['top_3_champs'].apply(lambda x: [champions.add(champ) for champ in x])
