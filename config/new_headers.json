@@ -1,0 +1,20 @@
+{
+    "new_headers": [
+        "time",
+        "discord_username",
+        "opgg_link",
+        "primary_role",
+        "top_3_champs",
+        "secondary_role",
+        "secondary_role_skill_level",
+        "peak_rank_2024_split3",
+        "is_peak_rank_true_rank",
+        "peak_rank_explanation",
+        "availability",
+        "interest_in_captain",
+        "reference_to_vln_league",
+        "playstyle_description",
+        "champion_identity",
+        "join_discord_flag"
+    ]
+}

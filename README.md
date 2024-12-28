@@ -46,3 +46,9 @@ This project aims to provide a toolset to analyze sign-up responses for VLN Draf
 
 ## Acknowledgments
 Special thanks to GepettosPuppet 
+
+### Other
+Create Virtual Environment: `python3.9 -m venv [name]-env`
+Activate Virtual Environment: `source [name]-env/bin/activate`
+Install Dependency List: `pip3 install -r requirements.txt`
+Deactivate Virtual Environment: `deactivate`
