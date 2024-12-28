@@ -85,8 +85,8 @@ champions = set()
 new_df['top_3_champs'].apply(lambda x: [champions.add(champ) for champ in x])
 print(f'Champions: {sorted(champions)}')
 
-# maybe have a list of champs and compare to that, if not in list, error solve in console???
-# MATCHA
+# delete col with 'join_discord_flag', 'champion_identity', 'peak_rank_explanation', 'reference_to_vln_league', 'playstyle_description'
+new_df = new_df.drop(columns=['join_discord_flag', 'champion_identity', 'peak_rank_explanation', 'reference_to_vln_league', 'playstyle_description'])
 
 # export df into new csv file in data folders
 new_df.to_csv('data/formatted_data.csv', index=False)
