@@ -54,11 +54,6 @@ new_df['top_3_champs'] = new_df['top_3_champs'].apply(lambda x: [champ.strip() f
 # format each champ name to be first letter capitlized, rest lowercase
 new_df['top_3_champs'] = new_df['top_3_champs'].apply(lambda x: [champ.capitalize() for champ in x])
 
-# add 3 columns (top_champ, second_champ, third_champ) to the df for of the top 3 champions
-new_df['top_champ'] = new_df['top_3_champs'].apply(lambda x: x[0])
-new_df['second_champ'] = new_df['top_3_champs'].apply(lambda x: x[1] if len(x) > 1 else None)
-new_df['third_champ'] = new_df['top_3_champs'].apply(lambda x: x[2] if len(x) > 2 else None)
-
 # if a champ is not in the list of champions, print "champ" name and discord_username
 for index, row in new_df.iterrows():
     for champ_name in row['top_3_champs']:
@@ -79,7 +74,11 @@ for index, row in new_df.iterrows():
                 if not champion_addressed:
                     print(f'{RED}[Champion Not In list] {champ_name} - {row["discord_username"]}{RESET}')
                     champion_addressed = True
-sys.exit()
+
+# add 3 columns (top_champ, second_champ, third_champ) to the df for of the top 3 champions
+new_df['top_champ'] = new_df['top_3_champs'].apply(lambda x: x[0])
+new_df['second_champ'] = new_df['top_3_champs'].apply(lambda x: x[1] if len(x) > 1 else None)
+new_df['third_champ'] = new_df['top_3_champs'].apply(lambda x: x[2] if len(x) > 2 else None)
 
 # print list of unique champions from 'top_3_champs', sort alphabetically
 champions = set()
