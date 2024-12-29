@@ -52,3 +52,8 @@ Create Virtual Environment: `python3.9 -m venv [name]-env`
 Activate Virtual Environment: `source [name]-env/bin/activate`
 Install Dependency List: `pip3 install -r requirements.txt`
 Deactivate Virtual Environment: `deactivate`
+
+#### TODO
+1. look through raw spreadsheet + read qualitative descriptions ~> assign a bool value of "consideration"
+2. look through primary / secondary rank descriptions ~> assign a bool value of "consider_secondary_role"
+3. create selenium scripts for league of graphs, op.gg, and rewind.lol to access more quantitative scouting info

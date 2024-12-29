@@ -1,15 +1,7 @@
 import sys
 import json
 import pandas as pd
-
-# ANSI escape codes
-RED = '\033[31m'
-GREEN = '\033[32m'
-YELLOW = '\033[33m'
-BLUE = '\033[34m'
-MAGENTA = '\033[35m'
-CYAN = '\033[36m'
-RESET = '\033[0m'  # Reset to default color
+import utility as util
 
 # open spreadsheet as pandas df
 df = pd.read_csv('data/data.csv')
@@ -45,6 +37,9 @@ for header in new_headers:
 # in new df, every instance of '\n' replace with '\t'
 new_df = new_df.replace('\n', '\t', regex=True)
 
+# export new df into new csv file in data folder
+util.export_df_to_csv(new_df, '01_cleaned_data.csv')
+
 # for the header "top_3_champs", split the string into a list of strings by ',' or ' ' or "/"
 new_df['top_3_champs'] = new_df['top_3_champs'].apply(lambda x: x.split(',') if ',' in x else x.split(' ') if ' ' in x else x.split('/'))
 
@@ -66,13 +61,13 @@ for index, row in new_df.iterrows():
                 for naming_pair in champ_corrections:
                     if champ_name == naming_pair["incorrect"]:
                         champ_name = naming_pair["correct"]
-                        print(f'{GREEN}[Champion Corrected] {naming_pair["incorrect"]} -> {naming_pair["correct"]} {RESET}')
+                        print(f'{util.GREEN}[Champion Corrected] {naming_pair["incorrect"]} -> {naming_pair["correct"]} {util.RESET}')
                         champion_addressed = True
                         # replace the incorrect champ name with the correct champ name in the df
                         new_df.at[index, 'top_3_champs'] = [champ_name if champ == naming_pair["incorrect"] else champ for champ in row['top_3_champs']]
                         break
                 if not champion_addressed:
-                    print(f'{RED}[Champion Not In list] {champ_name} - {row["discord_username"]}{RESET}')
+                    print(f'{util.RED}[Champion Not In list] {champ_name} - {row["discord_username"]}{util.RESET}')
                     champion_addressed = True
 
 # add 3 columns (top_champ, second_champ, third_champ) to the df for of the top 3 champions
