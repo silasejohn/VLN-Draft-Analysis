@@ -1,3 +1,5 @@
+import pandas as pd
+
 # ANSI escape codes
 RED = '\033[31m'
 GREEN = '\033[32m'
@@ -13,3 +15,12 @@ def export_df_to_csv(df, file_name):
 
 def pretty_print(msg, color):
     print(f'{color}{msg}{RESET}')
+
+# take in a df, and a list of headers and values per header
+# if the value is in that header col, then add entire row to a new df
+# output and print a new df
+def filter_df(df, headers, values):
+    new_df = pd.DataFrame(columns=df.columns)
+    for header, value in zip(headers, values):
+        new_df = new_df.append(df[df[header] == value], ignore_index=True)
+    return new_df
