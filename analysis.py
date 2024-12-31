@@ -20,7 +20,6 @@ df.columns = new_headers
 
 # in 'primary_role' column, how many of each value?
 print(df['primary_role'].value_counts())
-
 rank_options = ['Iron 1-4', 'Silver 1-4', 'Gold 1-4', 'Platinum 1-4', 'Emerald 4', 'Emerald 3', 'Emerald 2', 'Emerald 1', 'Diamond 4', 'Diamond 3', 'Diamond 2', 'Diamond 1', 'Master', 'Grandmaster', 'Challenger']
 
 # for each value_count, bucket emerald 4, emerald 3, emerald 2, emerald 1 into emerald
