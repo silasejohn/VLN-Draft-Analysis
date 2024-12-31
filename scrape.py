@@ -393,7 +393,7 @@ else:
 # Option 4: list of NA IGNs comma-separated
 # Option 6: list of NA op.gg/summoners/na semi--separated
 
-# exceptions
+# exceptions 
 # Option 7: single leagueofgraphs for euw ... ignore
 # OPTION: u.gg profile??? 
 # Option 8: single NA IGN (need to append #NA1)...  Mrionzo10
