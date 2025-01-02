@@ -180,56 +180,67 @@ class LeagueProfileScraper:
     def handle_query_input(driver):
         
         if LeagueProfileScraper.isProfileSummonerIGN:
+            isProfileHandled = False
             print(f"{util.YELLOW}Handling Profile Type: Summoner IGN...{util.RESET}")
 
-            IGN = query
-            search_url = LeagueProfileScraper.MAIN_WEBSITE # use existing URL
-            driver.get(search_url)
+            while not isProfileHandled:
+                IGN = query
+                search_url = LeagueProfileScraper.MAIN_WEBSITE # use existing URL
+                driver.get(search_url)
+        
+                if LeagueProfileScraper.isRegionNA:
+                    print(f"{util.YELLOW}Handling Region: NA{util.RESET}")
+                    pass # default region is NA on op.gg
+                elif LeagueProfileScraper.isRegionEUW:
+                    # Example IGN: Gojo Satoru #30082 
+                    print(f"{util.YELLOW}Handling Region: EUW{util.RESET}")
 
-            if LeagueProfileScraper.isRegionNA:
-                print(f"{util.YELLOW}Handling Region: NA{util.RESET}")
-                pass # default region is NA on op.gg
-            elif LeagueProfileScraper.isRegionEUW:
-                # Example IGN: Gojo Satoru #30082 
-                print(f"{util.YELLOW}Handling Region: EUW{util.RESET}")
+                    # find the region button 
+                    region_button = driver.find_element(By.XPATH, "//*[contains(@class, 'css-r2ch24') and contains(@class, 'em8s8ey1')]")
+                    print(f"{util.YELLOW}Clicking Region Button...{util.RESET}")
+                    region_button.click()
 
-                # find the region button 
-                region_button = driver.find_element(By.XPATH, "//*[contains(@class, 'css-r2ch24') and contains(@class, 'em8s8ey1')]")
-                print(f"{util.YELLOW}Clicking Region Button...{util.RESET}")
-                region_button.click()
+                    # wait for euw region button to appear on screen
+                    print(f"{util.YELLOW}Waiting for EUW Region Button...{util.RESET}")
+                    # wait for element with class 'dropdown-detail to show' 
+                    LeagueProfileScraper.wait_for_element_to_load(driver, By.CLASS_NAME, 'dropdown-detail', custom_error_msg="Dropdown has not appeared!")
 
-                # wait for euw region button to appear on screen
-                print(f"{util.YELLOW}Waiting for EUW Region Button...{util.RESET}")
-                # wait for element with class 'dropdown-detail to show' 
-                LeagueProfileScraper.wait_for_element_to_load(driver, By.CLASS_NAME, 'dropdown-detail', custom_error_msg="Dropdown has not appeared!")
+                    # get the parent of region_button
+                    region_button_parent = region_button.find_element(By.XPATH, "parent::*")
 
-                # get the parent of region_button
-                region_button_parent = region_button.find_element(By.XPATH, "parent::*")
+                    # find the dropdown detail div
+                    dropdown_detail_div = region_button_parent.find_element(By.CLASS_NAME, 'dropdown-detail')                
 
-                # find the dropdown detail div
-                dropdown_detail_div = region_button_parent.find_element(By.CLASS_NAME, 'dropdown-detail')                
+                    # find the EUW region button
+                    print(f"{util.YELLOW}Iterating through Region Button Options...{util.RESET}")
+                    region_button_options = dropdown_detail_div.find_elements(By.XPATH, "//*[contains(@class, 'css-60l9xa') and contains(@class, 'em8s8ey3')]")
+                    
+                    # iterate through the region button options until you find one that has text that says "Europe West"
+                    for region_option in region_button_options:
+                        if "Europe West" in region_option.text:
+                            print(f"{util.YELLOW}Clicking EUW Region Option...{util.RESET}")
+                            region_option.click()
+                            break
+                    
+                    print(f"{util.GREEN}Region Changed to EUW!{util.RESET}")
 
-                # find the EUW region button
-                print(f"{util.YELLOW}Iterating through Region Button Options...{util.RESET}")
-                region_button_options = dropdown_detail_div.find_elements(By.XPATH, "//*[contains(@class, 'css-60l9xa') and contains(@class, 'em8s8ey3')]")
-                
-                # iterate through the region button options until you find one that has text that says "Europe West"
-                for region_option in region_button_options:
-                    if "Europe West" in region_option.text:
-                        print(f"{util.YELLOW}Clicking EUW Region Option...{util.RESET}")
-                        region_option.click()
-                        break
-                
-                print(f"{util.GREEN}Region Changed to EUW!{util.RESET}")
+                # Find the op.gg search box
+                search_box = driver.find_element(By.NAME, 'search')
 
-            # Find the op.gg search box
-            search_box = driver.find_element(By.NAME, 'search')
+                # enter the summoner IGN + enter
+                search_box.send_keys(IGN + Keys.RETURN)  # Send query and hit Enter
 
-            # enter the summoner IGN + enter
-            search_box.send_keys(IGN + Keys.RETURN)  # Send query and hit Enter
-
-            # Wait for the search results to load, via the top-tier class
-            LeagueProfileScraper.wait_for_element_to_load(driver, By.CLASS_NAME, 'top-tier')
+                # Wait for the search results to load, via the top-tier class
+                print(f"{util.YELLOW}Waiting for Search Results to Load...{util.RESET}")
+                # css-1jhongn e1o2llc01
+                status = LeagueProfileScraper.wait_for_element_to_load(driver, By.CLASS_NAME, 'top-tier')
+                if status == -1:
+                    print(f"{util.RED}This is NOT an NA Profile!{util.RESET}")
+                    LeagueProfileScraper.isRegionEUW = True
+                    LeagueProfileScraper.isRegionNA = False
+                else:
+                    print(f"{util.GREEN}Search Results Loaded!{util.RESET}")
+                    isProfileHandled = True
 
         elif LeagueProfileScraper.isProfileSingleSearch:
             print(f"{util.YELLOW}Handling Profile Type: Single Search...{util.RESET}")
@@ -259,7 +270,7 @@ class LeagueProfileScraper:
                 print(f"{util.RED}{custom_error_msg}{util.RESET}")
             else:
                 print(f"{util.RED}{value} Element not Found!{util.RESET}")
-            return None
+            return -1
 
     @staticmethod
     # will update the op.gg summoner profile before scraping its data
@@ -487,10 +498,12 @@ counter = 1
 
 # Option 1: single NA IGN
 # Option 2: single EUW IGN
+# Option 3: single NA op.gg/summoners/na
+# Option 4: single EUW op.gg/summoners/euw
+
+# Option 5: multisearch
 
 # could just be op.gg/summoners/search ... region=na
-# Option 1: single NA op.gg/summoners/na
-# Option 2: single EUW op.gg/summoners/euw
 # Option 3: single multisearch op.gg/multisearch/na
 # OPTION 5: single multisearch op.gg/multisearch/euw
 # Option 4: list of NA IGNs comma-separated
@@ -508,8 +521,9 @@ summoner_ign_na_example = "dont ever stop #NA1"
 summoner_ign_euw_example = "Gojo Satoru #30082"
 na_profile_example = "https://www.op.gg/summoners/na/dont%20ever%20stop-NA1"
 euw_profile_example = "https://www.op.gg/summoners/euw/Gojo%20Satoru-30082"
+na_multisearch_example = "https://www.op.gg/multisearch/na?summoners=xenux%23xenux%2Clordofthewhites%23na1"
 
-query = na_profile_example
+query = summoner_ign_euw_example
 
 # Perform the search
 print(f"Query {counter}: {query}")
