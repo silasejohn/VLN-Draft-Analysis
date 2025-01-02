@@ -57,3 +57,4 @@ Deactivate Virtual Environment: `deactivate`
 1. look through raw spreadsheet + read qualitative descriptions ~> assign a bool value of "consideration"
 2. look through primary / secondary rank descriptions ~> assign a bool value of "consider_secondary_role"
 3. create selenium scripts for league of graphs, op.gg, and rewind.lol to access more quantitative scouting info
+4. COOL PRINT OUTPUT + DYNAMIC PRINT OUTPUT
