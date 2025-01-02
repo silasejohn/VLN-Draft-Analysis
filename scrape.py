@@ -17,9 +17,12 @@ import utility as util
 
 # summ region
 # multi.gg op.gg or IGN
+# no ranked history, no top tier, no current rank
 # info on recent champs in last month
 # info on friends recently played with
-# https://www.op.gg/summoners/na/dont%20ever%20stop-NA1
+
+def argus_print(msg):
+    print(f"\n[[{util.MAGENTA} a r g u s {util.RESET}]] >> {msg}...")
 
 class LeagueProfileScraper:
 
@@ -57,10 +60,24 @@ class LeagueProfileScraper:
     isProfileNonStandard = False # u.gg, leagueofgraphs, etc. 
 
     @staticmethod
+    def reset_bool_flags_to_false():
+        LeagueProfileScraper.isRegionNA = False
+        LeagueProfileScraper.isRegionEUW = False
+        LeagueProfileScraper.isProfileSummonerIGN = False
+        LeagueProfileScraper.isProfileSingleSearch = False
+        LeagueProfileScraper.isProfileMultiSearch = False
+        LeagueProfileScraper.isProfileNonStandard = False
+
+    @staticmethod
     # Function to fetch, query, and retrieve all relevant summoner stats
     def query_summoner_stats(original_query, sleep=True):
+
+        LeagueProfileScraper.reset_bool_flags_to_false()
+
         if sleep:
             time.sleep(randint(10, 50))  # Random sleep
+
+        print(f"\n[{util.CYAN}INCOMING QUERY{util.RESET}] {util.CYAN}{original_query}{util.RESET}")
 
         # Identify the query input
         query_list, summoner_profiles = LeagueProfileScraper.identify_query_input(original_query)
@@ -71,17 +88,15 @@ class LeagueProfileScraper:
 
         query_counter = 1
 
-        print(f"{util.GREEN}Query List: {query_list}{util.RESET}")
-
         if LeagueProfileScraper.driver is None:
             LeagueProfileScraper.driver = LeagueProfileScraper.get_web_driver()  # Initialize WebDriver
 
         for query in query_list:
             # if size of summoner profiles is bigger than 1, print the current profile
             if len(summoner_profiles) > 1:
-                print(f"{util.YELLOW}Querying Summoner Stats for Profile {query_counter}: {summoner_profiles[query_counter - 1]}{util.RESET}")
+                print(f"{util.YELLOW}\nExtracting Profile {query_counter}: {summoner_profiles[query_counter - 1]}{util.RESET}")
             else: 
-                print(f"{util.YELLOW}Querying Summoner Stats for Profile {query_counter}: {query}{util.RESET}")
+                print(f"{util.YELLOW}\nExtracting Profile {query_counter}: {query}{util.RESET}")
             query_counter += 1
 
             # Handle the query input
@@ -108,8 +123,7 @@ class LeagueProfileScraper:
         output = LeagueProfileScraper.calculate_multi_acccount_multi_season_peak_rank()
         time.sleep(0.5)  # Random sleep
 
-        time.sleep(5)
-        LeagueProfileScraper.driver.quit()  # Close the browser
+        # LeagueProfileScraper.driver.quit()  # Close the browser
 
         if output == -1:
             if summoner_profiles:
@@ -138,6 +152,7 @@ class LeagueProfileScraper:
     # sets up the webdriver (automated chrome access)
     def get_web_driver():
         """Sets up and returns the WebDriver (Firefox or Chrome)."""
+        argus_print("Setting up Chrome WebDriver")
         
         if LeagueProfileScraper.browser.lower() == "firefox":
             options = FirefoxOptions()
@@ -160,35 +175,34 @@ class LeagueProfileScraper:
         multisearch_query_list = []
         summoner_profiles = []
         
-        print(f"{util.CYAN}\n[INCOMING QUERY] {query}{util.RESET}")
-        print(f"[[{util.MAGENTA} n o v a {util.RESET}]] >> Identifying Query Type...")
+        argus_print("Identifying Query Type")
         # MATCHA: have a dynamic progress bar going while we have print output
         
         # Region Assignment
         if "/euw" in query:
             LeagueProfileScraper.isRegionEUW = True
-            print(f"[{util.MAGENTA}REGION{util.RESET}] {util.GREEN}EUW{util.RESET}")
+            print(f"[{util.CYAN}REGION{util.RESET}] {util.GREEN}EUW{util.RESET}")
         elif "/na" in query:
             LeagueProfileScraper.isRegionNA = True
-            print(f"[{util.MAGENTA}REGION{util.RESET}] {util.GREEN}NA{util.RESET}")
+            print(f"[{util.CYAN}REGION{util.RESET}] {util.GREEN}NA{util.RESET}")
         
         # Profile Type Assignment
         if "multisearch" in query:
             LeagueProfileScraper.isProfileMultiSearch = True
-            print(f"{util.GREEN}Multi-Search Profile Detected!{util.RESET}")
+            print(f"[{util.CYAN}Profile Type{util.RESET}] {util.GREEN}Multi-Search{util.RESET}")
             multisearch_query_list, summoner_profiles = LeagueProfileScraper.handle_multi_search(query)
         elif ("leagueofgraphs" in query) or ("u.gg" in query):
             LeagueProfileScraper.isProfileNonStandard = True
-            print(f"{util.GREEN}Non-Standard Profile Detected!{util.RESET}")
+            print(f"[{util.CYAN}Profile Type{util.RESET}] {util.GREEN}Non-OP.GG Profile{util.RESET}")
         elif "op.gg/summoners" in query:
             LeagueProfileScraper.isProfileSingleSearch = True
-            print(f"{util.GREEN}Single-Search Profile Detected!{util.RESET}")
+            print(f"[{util.CYAN}Profile Type{util.RESET}] {util.GREEN}Default Profile{util.RESET}")
         elif "#" in query: # could be a single IGN
             # MATCHA: count number of hashtags in the query for number of profiles
             LeagueProfileScraper.isProfileSummonerIGN = True
-            print(f"{util.GREEN}Summoner IGN Profile Detected!{util.RESET}")
+            print(f"[{util.CYAN}Profile Type{util.RESET}] {util.GREEN}Summoner IGN{util.RESET}")
         else: # non standard profile, handle in terminal
-            print(f"{util.RED}Non-Standard Profile Detected!{util.RESET}")
+            print(f"[{util.CYAN}Profile Type{util.RESET}] {util.RED}Incorrect Syntax{util.RESET}")
             print(f"[QUERY] {query}")
             profileTypeHandled = False
             while not profileTypeHandled:
@@ -228,7 +242,7 @@ class LeagueProfileScraper:
     @staticmethod
     # handles the query input and determines the search method
     def handle_query_input(query):
-        print(f"{util.YELLOW}Handling Query Input: {query}{util.RESET}")
+        argus_print("Processing Query Input")
 
         if LeagueProfileScraper.isProfileSummonerIGN:
             isProfileHandled = False
@@ -286,9 +300,14 @@ class LeagueProfileScraper:
                 # css-1jhongn e1o2llc01
                 status = LeagueProfileScraper.wait_for_element_to_load(By.CLASS_NAME, 'top-tier')
                 if status == -1:
-                    print(f"{util.RED}This is NOT an NA Profile!{util.RESET}")
-                    LeagueProfileScraper.isRegionEUW = True
-                    LeagueProfileScraper.isRegionNA = False
+                    if LeagueProfileScraper.isRegionNA:
+                        print(f"{util.RED}This is NOT an NA Profile!{util.RESET}")
+                        LeagueProfileScraper.isRegionEUW = True
+                        LeagueProfileScraper.isRegionNA = False
+                    else:
+                        print(f"{util.RED}This is NOT an EUW Profile!{util.RESET}")
+                        LeagueProfileScraper.isRegionEUW = False
+                        LeagueProfileScraper.isRegionNA = True
                 else:
                     print(f"{util.GREEN}Search Results Loaded!{util.RESET}")
                     isProfileHandled = True
@@ -313,8 +332,7 @@ class LeagueProfileScraper:
     def handle_multi_search(query):
         query_list = []
         summoner_profiles = []
-        print(f"{util.YELLOW}Handling Multi-Search Query...{util.RESET}")
-       
+        
         # sanity check
         if not LeagueProfileScraper.isProfileMultiSearch:
             print(f"{util.RED}ERROR: Multi-Search Query Not Detected!{util.RESET}")
@@ -327,12 +345,12 @@ class LeagueProfileScraper:
         LeagueProfileScraper.driver.get(query)
 
         # wait for the search results to load
-        print(f"{util.YELLOW}Waiting for Multi-Search Results to Load...{util.RESET}")
+        argus_print("Chunking Multi-Search Profile")
         LeagueProfileScraper.wait_for_element_to_load(By.CLASS_NAME, 'multi-list')
 
         # identify multi-list container
         multi_list_container = LeagueProfileScraper.driver.find_element(By.CLASS_NAME, 'multi-list')
-        print(f"{util.GREEN}Multi-Search Results Loaded!{util.RESET}")
+        print(f"({util.GREEN}status{util.RESET}) {util.GREEN}Multi-Search Results Loaded!{util.RESET}")
 
         # identify the <li> child elements
         multi_list_items = multi_list_container.find_elements(By.TAG_NAME, 'li')
@@ -358,9 +376,9 @@ class LeagueProfileScraper:
             summoner_href = summoner_name_a.get_attribute('href')
             summoner_ign = (summoner_name_a.text).replace("\n", "")
 
-            print(f"{util.YELLOW}Extracting Summoner Info for Profile {counter}...{util.RESET}")
-            print(f"{util.GREEN}Summoner IGN: {summoner_ign}{util.RESET}")
-            print(f"{util.GREEN}Summoner HREF: {summoner_href}{util.RESET}")
+            argus_print(f"Extracting Summoner Info for Profile {counter}")
+            print(f"[{util.CYAN}SUMMONER IGN{util.RESET}] {util.GREEN}{summoner_ign}{util.RESET}")
+            print(f"[{util.CYAN}SUMMONER LINK{util.RESET}] {util.GREEN}{summoner_href}{util.RESET}")
             query_list.append(summoner_href)
             summoner_profiles.append(summoner_ign)
             counter += 1
@@ -374,7 +392,6 @@ class LeagueProfileScraper:
     # waits for an "element" to show up on page
     # used to wait for page (and specific element) to load
     def wait_for_element_to_load(by, value, timeout=10, custom_error_msg=None):
-        """Wait until the element is found or the timeout expires."""
         try:
             element = WebDriverWait(LeagueProfileScraper.driver, timeout).until(
                 EC.presence_of_element_located((by, value))
@@ -390,9 +407,9 @@ class LeagueProfileScraper:
     @staticmethod
     # will update the op.gg summoner profile before scraping its data
     def update_opgg_summoner_profile():
+        argus_print("Force Updating Summoner OP.GG Profile")
         try:
             # Get the last update field and print it
-            print(f"{util.YELLOW}Updating OP.GG Profile...{util.RESET}")
             LeagueProfileScraper.wait_for_element_to_load(By.CLASS_NAME, 'last-update')
             last_update_field = LeagueProfileScraper.driver.find_element(By.CLASS_NAME, 'last-update')
             content = last_update_field.text
@@ -427,7 +444,7 @@ class LeagueProfileScraper:
     @staticmethod
     # will expand accessible match history to at least 30 days (for more data)
     def expand_match_history():
-        
+        argus_print("Attempting to Iteratively Expand Match History")
         retrievedLast30DaysMatchHistory = False
         match_history_extention_attempts = 0
 
@@ -440,7 +457,7 @@ class LeagueProfileScraper:
             pass
 
         while not retrievedLast30DaysMatchHistory:
-            print(f"{util.YELLOW}\nAttempt {match_history_extention_attempts} to Expand Match History...{util.RESET}")
+            print(f"{util.YELLOW}<< Expansion #{match_history_extention_attempts} >>{util.RESET}")
 
             # Locating the Expand Match History Button
             more_match_history_button = None # Initialize to None
@@ -540,6 +557,7 @@ class LeagueProfileScraper:
     @staticmethod
     # will scrape the summoner ign of the current profile
     def scrape_summoner_ign():
+        argus_print("Scraping Summoner IGN && Tag")
         # find h1 element with 2 class attributes (css-12ijbdy,e1swkqyq0) 
         summoner_ign_header = LeagueProfileScraper.driver.find_element(By.XPATH, "//*[contains(@class, 'css-12ijbdy') and contains(@class, 'e1swkqyq0')]")
         summoner_ign = summoner_ign_header.text
@@ -550,7 +568,8 @@ class LeagueProfileScraper:
     @staticmethod
     # scrapes all rank information from prior seasons of current profile, determines true peak rank
     def scrape_rank_info(summoner_ign):
-
+        argus_print("Scraping Multi-Season Rank Climb Points")
+        
         # find the rank info container
         rank_info_container = LeagueProfileScraper.driver.find_element(By.XPATH, "//*[contains(@class, 'css-1wk31w7') and contains(@class, 'eaj0zte0')]")
         
@@ -623,6 +642,7 @@ class LeagueProfileScraper:
     @staticmethod
     # calculates peak rank across multiple accounts and seasons
     def calculate_multi_acccount_multi_season_peak_rank():
+        argus_print("Calculating Multi-Season, Multi-Account Peak Ranks")
         output_peak_ranks = []
         if LeagueProfileScraper.rank_info:
             print(f"{util.GREEN}Rank Info Scraped!{util.RESET}")
@@ -688,15 +708,22 @@ incorrect_example = "dont ever stop"
 
 first_query = na_multisearch_example_3
 
-# Perform the search
-print(f"Query {counter}: {first_query}")
-search_results, summoner_ign = LeagueProfileScraper.query_summoner_stats(first_query, sleep=False)
-query_results[summoner_ign] = search_results
-# MATCHA ... replace summoner_ign with discord_username when integrating the spreadsheet input for loop
-# MATCHA ... reformat print statements with better formatting + colors
+# example_list = [first_query]
+example_list = [summoner_ign_na_example, summoner_ign_euw_example, na_profile_example, euw_profile_example, na_multisearch_example, na_multisearch_example_2, euw_multisearch_example, na_multisearch_example_3, incorrect_example]
 
-# print(f"Search results: {search_results}")
-counter += 1
+for first_query in example_list:
+    # Perform the search
+    print(f"Query {counter}: {first_query}")
+    search_results, summoner_ign = LeagueProfileScraper.query_summoner_stats(first_query, sleep=False)
+    query_results[summoner_ign] = search_results
+    # MATCHA ... replace summoner_ign with discord_username when integrating the spreadsheet input for loop
+    # MATCHA ... reformat print statements with better formatting + colors
+
+    # print(f"Search results: {search_results}")
+    counter += 1
+
+LeagueProfileScraper.driver.quit()  # Close the browser
+print(f"\n{util.GREEN}Driver Quit {query_results}{util.RESET}")
 
 # Write the dictionary to a JSON file
 with open("data/search_results.json", "w") as json_file:
